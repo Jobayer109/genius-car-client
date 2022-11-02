@@ -1,15 +1,17 @@
 import { GoogleAuthProvider } from "firebase/auth";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
 const Login = () => {
-  const { signInUser, googleSignIn } = useContext(AuthContext);
+  const { signInUser, googleSignIn, user } = useContext(AuthContext);
   const googleProvider = new GoogleAuthProvider();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -19,7 +21,7 @@ const Login = () => {
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
-        navigate('/')
+        navigate(from, { replace: true });
         form.reset();
       })
       .catch((error) => {
@@ -36,6 +38,12 @@ const Login = () => {
         console.log(error.name, error.message);
       });
   };
+
+  // useEffect(() => {
+  //   if (user) {
+
+  //   }
+  // },[email, from])
 
   // for handle navigate . use here useEffect
 

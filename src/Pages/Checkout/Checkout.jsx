@@ -12,7 +12,7 @@ const Checkout = () => {
   const handleCheckoutForm = (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = user?.displayName || `${form.firstName.value} ${form.lastName.value}`;
+    const name = `${form.firstName.value} ${form.lastName.value}`;
     const phone = form.phone.value;
     const email = user?.email || form.email.value;
     const message = form.message.value;

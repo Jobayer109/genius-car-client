@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
+import { FaUserSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
+import { AuthContext } from "../../Contexts/AuthProvider";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    logOut()
+    .then(result=>{}).then(error=>{})
+}
+
+
   const navItems = (
     <>
       <li>
@@ -10,12 +20,23 @@ const Header = () => {
           Home
         </Link>
       </li>
-      
       <li>
+        <Link className="font-semibold" to="/orders">
+          Orders
+        </Link>
+      </li>
+
+      {user?.email ? (
+       
+        <li>
+          <button onClick={handleSignOut} className="btn btn-outline btn-info ml-4">Sign out</button>
+        </li>
+      
+      ) : (<li>
         <Link className="font-semibold" to="/login">
           Login
         </Link>
-      </li>
+      </li>)}
     </>
   );
 
@@ -54,6 +75,13 @@ const Header = () => {
         <ul className="menu menu-horizontal p-0">{navItems}</ul>
       </div>
       <div className="navbar-end">
+        {user?.photoURL ? (
+          <div className="avatar online mr-4 ">
+            <div className="w-12 rounded-full border-2 border-black">
+              <img src={user?.photoURL} alt="" />
+            </div>
+          </div>) : <FaUserSlash className="text-red-600 w-24"/>
+        }
         <button className="btn btn-outline">Appointment</button>
       </div>
     </div>
