@@ -1,5 +1,5 @@
 import { GoogleAuthProvider } from "firebase/auth";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../../assets/images/login/login.svg";
@@ -25,8 +25,9 @@ const Login = () => {
         form.reset();
 
         const currentUser = {
-          email: user?.email,
+          email: result?.user?.email,
         };
+
         fetch(`http://localhost:5000/jwt`, {
           method: "POST",
           headers: {
@@ -36,11 +37,9 @@ const Login = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data.token);
-            localStorage.setItem("Token", data.token)
+            localStorage.setItem("Token", data.token);
+            navigate(from, { replace: true });
           });
-
-        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error.message);
