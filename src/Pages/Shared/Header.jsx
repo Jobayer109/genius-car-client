@@ -20,23 +20,27 @@ const Header = () => {
           Home
         </Link>
       </li>
-      <li>
-        <Link className="font-semibold" to="/orders">
-          Orders
-        </Link>
-      </li>
 
       {user?.email ? (
-       
+        <>
+          <li>
+            <Link className="font-semibold" to="/orders">
+              Orders
+            </Link>
+          </li>
+          <li>
+            <button onClick={handleSignOut} className="btn btn-ghost ml-4">
+              Sign out
+            </button>
+          </li>
+        </>
+      ) : (
         <li>
-          <button onClick={handleSignOut} className="btn btn-outline btn-info ml-4">Sign out</button>
+          <Link className="font-semibold" to="/login">
+            Login
+          </Link>
         </li>
-      
-      ) : (<li>
-        <Link className="font-semibold" to="/login">
-          Login
-        </Link>
-      </li>)}
+      )}
     </>
   );
 

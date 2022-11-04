@@ -1,5 +1,5 @@
 import { GoogleAuthProvider } from "firebase/auth";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../../assets/images/login/login.svg";
@@ -12,6 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -21,8 +22,25 @@ const Login = () => {
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
-        navigate(from, { replace: true });
         form.reset();
+
+        const currentUser = {
+          email: user?.email,
+        };
+        fetch(`http://localhost:5000/jwt`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(currentUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.token);
+            localStorage.setItem("Token", data.token)
+          });
+
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.log(error.message);
@@ -41,11 +59,9 @@ const Login = () => {
 
   // useEffect(() => {
   //   if (user) {
-
+  //     navigate(from, { replace: true });
   //   }
-  // },[email, from])
-
-  // for handle navigate . use here useEffect
+  // }, [from, navigate, user]);
 
   return (
     <div className="hero ">
